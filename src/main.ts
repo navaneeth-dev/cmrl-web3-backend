@@ -1,27 +1,14 @@
-import Fastify from "fastify";
+import express from "express";
 import { ConnectionOptions, Queue, Worker } from "bullmq";
 import "dotenv/config";
 import { envSchema } from "./models/env.schema";
+import pinohttp, { Options } from "pino-http";
 
-// To fix
-const envToLogger = {
-  development: {
-    transport: {
-      target: "pino-pretty",
-    },
-  },
-};
-const fastify = Fastify({
-  logger: envToLogger.development,
-});
+const app = express();
 
 const main = async () => {
   const env = envSchema.safeParse(process.env);
   if (!env.success) {
-    fastify.log.error(
-      { errors: env.error.errors },
-      "Environment variables not set."
-    );
     return;
   }
 
@@ -48,25 +35,21 @@ const main = async () => {
     connection,
   });
 
-  fastify.get("/", async (req, res) => {
+  app.get("/", async (req, res) => {
     await myQueue.add("myJobName", { foo: "bar" });
-    return "Hello";
+    return { hello: "world" };
   });
 
-  try {
-    const server = await fastify.listen({ port: 3000 });
-    fastify.log.info(server, "hello");
-  } catch (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
+  const envToLogger = {
+    development: {
+      transport: {
+        target: "pino-pretty",
+      },
+    },
+  };
+  const pino = pinohttp(envToLogger[env.data.NODE_ENV] ?? {});
+  app.use(pino);
+  app.listen(3000, () => pino.logger.info("Listening"));
 };
-
-["SIGINT", "SIGTERM"].forEach((signal) => {
-  process.on(signal, async () => {
-    await fastify.close();
-    process.exit(0);
-  });
-});
 
 main();

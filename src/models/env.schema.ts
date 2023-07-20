@@ -8,5 +8,5 @@ export const envSchema = z.object({
     (port) => parseInt(z.string().parse(port), 10),
     z.number().positive().max(65535)
   ),
-  NODE_ENV: z.string().default("development"),
+  NODE_ENV: z.enum(["development"]).default("development"),
 });
