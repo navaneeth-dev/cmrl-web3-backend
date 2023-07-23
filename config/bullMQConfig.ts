@@ -1,1 +1,2 @@
-export const connection = {};
+const connection = {};
+export default connection;

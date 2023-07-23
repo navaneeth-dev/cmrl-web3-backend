@@ -1,5 +1,5 @@
 import { ZodError, z } from "zod";
-import { logger } from "../utils/logger";
+import logger from "../utils/logger";
 import "dotenv/config";
 
 const envSchema = z.object({
@@ -15,7 +15,7 @@ const envSchema = z.object({
 
 type EnvSchema = z.infer<typeof envSchema>;
 
-export const parseEnv = (): EnvSchema | null => {
+const parseEnv = (): EnvSchema | null => {
   try {
     const parsedEnv = envSchema.parse(process.env);
     return parsedEnv;
@@ -31,4 +31,5 @@ export const parseEnv = (): EnvSchema | null => {
   }
 };
 
-export const ENV = parseEnv();
+const ENV = parseEnv();
+export default ENV;
