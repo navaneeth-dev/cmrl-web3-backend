@@ -13,9 +13,9 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development"]).default("development"),
 });
 
-type envSchemaType = z.infer<typeof envSchema>;
+type EnvSchema = z.infer<typeof envSchema>;
 
-export const parseEnv = (): envSchemaType | null => {
+export const parseEnv = (): EnvSchema | null => {
   try {
     const parsedEnv = envSchema.parse(process.env);
     return parsedEnv;
