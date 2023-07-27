@@ -3,13 +3,7 @@ import logger from "../utils/logger";
 import "dotenv/config";
 
 const envSchema = z.object({
-  REDISHOST: z.string(),
-  REDISUSER: z.string(),
-  REDISPASSWORD: z.string(),
-  REDISPORT: z.preprocess(
-    (port) => parseInt(z.string().parse(port), 10),
-    z.number().positive().max(65535)
-  ),
+  QSTASH_TOKEN: z.string(),
   NODE_ENV: z.enum(["development"]).default("development"),
   BITCART_URL: z.string().url(),
 });
