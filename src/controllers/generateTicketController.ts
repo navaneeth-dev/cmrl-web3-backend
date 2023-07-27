@@ -4,12 +4,15 @@ import { receiver } from "../../config/qstashConfig";
 const generateTicketController = async (req: Request, res: Response) => {
   // Verify from QStash
   const { body } = req;
-  const isValid = await receiver.verify({
-    signature: req.get("Upstash-Signature") ?? "",
-    body,
-  });
 
-  if (!isValid) {
+  try {
+    await receiver.verify({
+      signature: req.get("Upstash-Signature") ?? "",
+      body,
+    });
+
+    req.log.info(req.body);
+  } catch (err) {
     return res.status(403).send({ message: "Not from QStash" });
   }
 
