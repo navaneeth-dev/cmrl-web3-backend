@@ -12,5 +12,5 @@ app.use(pinoHttp({ logger }));
 (async () => {
   routes(app);
 
-  app.listen(3000, () => logger.info("Listening"));
+  app.listen(3000, () => logger.info("Listening on 3000"));
 })();
