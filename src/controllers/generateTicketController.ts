@@ -12,11 +12,12 @@ const generateTicketController = async (req: Request, res: Response) => {
     });
 
     req.log.info(req.body);
+
+    return res.send({ message: "Successfully got ticket" });
   } catch (err) {
+    req.log.error(err);
     return res.status(403).send({ message: "Not from QStash" });
   }
-
-  return res.send({ message: "Successfully got ticket" });
 };
 
 export default generateTicketController;
