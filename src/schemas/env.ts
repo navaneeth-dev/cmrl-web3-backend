@@ -11,6 +11,7 @@ const envSchema = z.object({
     z.number().positive().max(65535)
   ),
   NODE_ENV: z.enum(["development"]).default("development"),
+  BITCART_URL: z.string().url(),
 });
 
 type EnvSchema = z.infer<typeof envSchema>;
