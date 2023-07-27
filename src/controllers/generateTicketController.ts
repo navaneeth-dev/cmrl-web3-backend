@@ -10,7 +10,7 @@ const generateTicketController = async (req: Request, res: Response) => {
   });
 
   if (!isValid) {
-    return res.send({ message: "Not from QStash" });
+    return res.status(403).send({ message: "Not from QStash" });
   }
 
   return res.send({ message: "Successfully got ticket" });
