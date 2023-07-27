@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import ENV from "../schemas/env";
-import { ticketGenerationQueue } from "../jobs/ticketHandler";
 
 // Called from webhook of bitcart
 // Enqueue puppetter
@@ -18,7 +17,7 @@ const tickerController = async (req: Request, res: Response) => {
   if (invoice.notes !== "")
     return res.send({ message: "Already generated ticket" });
 
-  await ticketGenerationQueue.add(invoiceId, { invoiceId });
+  // Add to queue
   return res.send({ message: "Queued ticket generation" });
 };
 
