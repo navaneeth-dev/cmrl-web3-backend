@@ -1,11 +1,8 @@
 import pino from "pino";
 
-// const envToLogger = {
-//   development: {
-//     transport: {
-//       target: "pino-pretty",
-//     },
-//   },
-// };
-const logger = pino();
+const logger = pino(
+  process.env.NODE_ENV !== "production"
+    ? { transport: { target: "pino-pretty" } }
+    : {}
+);
 export default logger;
