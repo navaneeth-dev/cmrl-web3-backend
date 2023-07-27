@@ -3,6 +3,7 @@ import logger from "../utils/logger";
 import "dotenv/config";
 
 const envSchema = z.object({
+  BASE_URL: z.string(),
   QSTASH_TOKEN: z.string(),
   QSTASH_CURRENT_SIGNING_KEY: z.string(),
   QSTASH_NEXT_SIGNING_KEY: z.string(),

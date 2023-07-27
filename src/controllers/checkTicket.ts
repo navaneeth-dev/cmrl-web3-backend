@@ -20,7 +20,7 @@ const ticketController = async (req: Request, res: Response) => {
 
   // Add to queue
   client.publishJSON({
-    url: "http://bore.pub:36280/",
+    url: `${ENV?.BASE_URL}/api/generateTicket`,
     body: { invoiceId },
   });
   return res.send({ message: "Queued ticket generation" });
