@@ -4,7 +4,7 @@ import client from "../../config/qstashConfig";
 
 // Called from webhook of bitcart
 // Enqueue puppetter
-const tickerController = async (req: Request, res: Response) => {
+const ticketController = async (req: Request, res: Response) => {
   const invoiceId = req.params.id;
 
   // Verify invoice id via API
@@ -19,8 +19,11 @@ const tickerController = async (req: Request, res: Response) => {
     return res.send({ message: "Already generated ticket" });
 
   // Add to queue
-  client.publishJSON({ url: "https://example.com", body: { invoiceId } });
+  client.publishJSON({
+    url: `https://example.com/${invoiceId}`,
+    body: { invoiceId },
+  });
   return res.send({ message: "Queued ticket generation" });
 };
 
-export default tickerController;
+export default ticketController;
