@@ -6,7 +6,7 @@ import generateTicketController from "./controllers/generateTicketController";
 const routes = (app: Express) => {
   app.get("/api/health", healthController);
   app.post("/api/checkTicket/:id", ticketController);
-  app.post("/api/generateTicket/:id", generateTicketController);
+  app.post("/api/generateTicket", generateTicketController);
 };
 
 export default routes;
