@@ -7,6 +7,8 @@ import ENV from "../schemas/env";
 const nftStorage = new NFTStorage({ token: ENV!.NFT_STORAGE_TOKEN });
 
 const generateTicketController = async (req: Request, res: Response) => {
+  req.log.debug("generateTicket called");
+
   // Verify from QStash
   const { body } = req;
 
