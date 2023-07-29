@@ -10,7 +10,7 @@ const envSchema = z.object({
   QSTASH_TOKEN: z.string(),
   QSTASH_CURRENT_SIGNING_KEY: z.string(),
   QSTASH_NEXT_SIGNING_KEY: z.string(),
-  NODE_ENV: z.enum(["development"]).default("development"),
+  NODE_ENV: z.enum(["development", "production"]).default("development"),
   BITCART_URL: z.string().url(),
 });
 
