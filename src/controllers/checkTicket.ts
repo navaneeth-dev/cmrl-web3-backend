@@ -6,8 +6,8 @@ import { client } from "../../config/qstashConfig";
 // Enqueue puppetter
 const ticketController = async (req: Request, res: Response) => {
   // const invoiceId = req.params.id;
-  req.log.info(req.body);
-  const { invoiceId } = req.body;
+  req.log.info({ body: req.body }, "checkTicket");
+  const invoiceId = req.body.id;
 
   // Verify invoice id via API
   const response = await fetch(`${ENV!.BITCART_URL}/api/invoices/${invoiceId}`);
