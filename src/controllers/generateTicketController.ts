@@ -111,7 +111,8 @@ const generateTicketController = async (req: Request, res: Response) => {
     req.log.debug(imgBase64.substring(0, 200));
 
     // Convert b64 str to Blob for uploading img
-    const byteCharacters = atob(imgBase64);
+    // Dont convert so 22: data:image/png;base64,
+    const byteCharacters = atob(imgBase64.substring(22));
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i += 1) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
