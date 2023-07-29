@@ -104,7 +104,11 @@ const generateTicketController = async (req: Request, res: Response) => {
       `document.querySelector("div > div.col-md-5.col-sm-5.col-5 > div:nth-child(1) > img").getAttribute('src')`
     )) as string;
 
+    req.log.debug(await page.url());
+
     await browser.close();
+
+    req.log.debug(imgBase64.substring(0, 200));
 
     // Convert b64 str to Blob for uploading img
     const byteCharacters = atob(imgBase64);
