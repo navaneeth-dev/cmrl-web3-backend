@@ -8,10 +8,9 @@ const generateTicketController = async (req: Request, res: Response) => {
   try {
     await receiver.verify({
       signature: req.get("Upstash-Signature") ?? "",
-      body,
+      body: JSON.stringify(body),
+      clockTolerance: 30,
     });
-
-    req.log.info(req.body);
 
     return res.send({ message: "Successfully got ticket" });
   } catch (err) {
