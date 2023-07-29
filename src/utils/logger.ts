@@ -9,6 +9,6 @@ const logger = pino(
           options: { ignore: "pid,hostname,req,res" },
         },
       }
-    : {}
+    : { level: "debug" }
 );
 export default logger;
