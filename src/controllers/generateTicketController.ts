@@ -123,7 +123,7 @@ const generateTicketController = async (req: Request, res: Response) => {
     req.log.debug("Uploading img");
     const blob = new Blob([byteArray], { type: "image/png" });
     const cid = await nftStorage.storeBlob(blob);
-    req.log.debug("CID", cid);
+    req.log.debug({ cid }, "CID");
 
     // Update CID in Notes
     const updateInvoice = await fetch(
