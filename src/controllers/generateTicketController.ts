@@ -137,7 +137,7 @@ const generateTicketController = async (req: Request, res: Response) => {
       }
     );
     const json = await updateInvoice.json();
-    req.log.info("Updated CID", json.id);
+    req.log.info({ invoiceId: json.id }, "Updated Invoice");
 
     return res.send({ message: "Successfully got ticket", imgBase64 });
   } catch (err) {
