@@ -7,6 +7,7 @@ const app = express();
 
 // Middlewares
 app.use(pinoHttp({ logger }));
+app.use(express.json());
 
 // IIFI
 (async () => {
