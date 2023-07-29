@@ -22,6 +22,7 @@ const ticketController = async (req: Request, res: Response) => {
   client.publishJSON({
     url: `${ENV?.BASE_URL}/api/generateTicket`,
     body: { invoiceId },
+    retries: 0,
   });
   return res.send({ message: "Queued ticket generation" });
 };
