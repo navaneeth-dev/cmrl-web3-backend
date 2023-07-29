@@ -5,7 +5,9 @@ import { client } from "../../config/qstashConfig";
 // Called from webhook of bitcart
 // Enqueue puppetter
 const ticketController = async (req: Request, res: Response) => {
-  const invoiceId = req.params.id;
+  // const invoiceId = req.params.id;
+  req.log.info(req.body);
+  const { invoiceId } = req.body;
 
   // Verify invoice id via API
   const response = await fetch(`${ENV!.BITCART_URL}/api/invoices/${invoiceId}`);
