@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import puppeteer, { ElementHandle } from "puppeteer";
 import { NFTStorage } from "nft.storage";
-import { receiver } from "../../config/qstashConfig";
 import ENV from "../schemas/env";
 
 const nftStorage = new NFTStorage({ token: ENV!.NFT_STORAGE_TOKEN });
@@ -9,16 +8,9 @@ const nftStorage = new NFTStorage({ token: ENV!.NFT_STORAGE_TOKEN });
 const generateTicketController = async (req: Request, res: Response) => {
   req.log.debug("generateTicket called");
 
-  // Verify from QStash
   const { body } = req;
 
   try {
-    await receiver.verify({
-      signature: req.get("Upstash-Signature") ?? "",
-      body: JSON.stringify(body),
-      clockTolerance: 30,
-    });
-
     const { invoiceId } = body;
 
     const initiatePaymentUrl = "https://tickets.chennaimetrorail.org/";
