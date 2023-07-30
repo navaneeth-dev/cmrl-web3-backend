@@ -3,13 +3,14 @@ import logger from "../utils/logger";
 import "dotenv/config";
 
 const envSchema = z.object({
+  REDISUSER: z.string(),
+  REDISHOST: z.string(),
+  REDISPORT: z.string(),
+  REDISPASSWORD: z.string(),
   FLY_REGION: z.string().optional(),
   UPI_VPA: z.string(),
   NFT_STORAGE_TOKEN: z.string(),
   BASE_URL: z.string(),
-  QSTASH_TOKEN: z.string(),
-  QSTASH_CURRENT_SIGNING_KEY: z.string(),
-  QSTASH_NEXT_SIGNING_KEY: z.string(),
   NODE_ENV: z.enum(["development", "production"]).default("development"),
   BITCART_URL: z.string().url(),
 });
