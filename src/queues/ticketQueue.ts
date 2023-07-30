@@ -23,6 +23,7 @@ const ticketWorker = new Worker(
         executablePath: ENV?.FLY_REGION ? "/usr/bin/google-chrome" : undefined,
         devtools: true,
         args: ["--no-sandbox"],
+        protocolTimeout: 60 * 1,
       });
 
       const page = await browser.newPage();
