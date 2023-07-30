@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import ENV from "../schemas/env";
-import { client } from "../../config/qstashConfig";
+import ticketQueue from "../queues/ticketQueue";
 
 // Called from webhook of bitcart
 // Enqueue puppetter
@@ -21,11 +21,7 @@ const ticketController = async (req: Request, res: Response) => {
     return res.send({ message: "Already generated ticket" });
 
   // Add to queue
-  client.publishJSON({
-    url: `${ENV?.BASE_URL}/api/generateTicket`,
-    body: { invoiceId },
-    retries: 0,
-  });
+  await ticketQueue.add(invoiceId, { invoiceId });
   return res.send({ message: "Queued ticket generation" });
 };
 
