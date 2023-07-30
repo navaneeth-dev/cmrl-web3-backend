@@ -1,16 +1,21 @@
 import puppeteer, { ElementHandle } from "puppeteer";
 import { NFTStorage } from "nft.storage";
+import { Queue, Worker } from "bullmq";
 import ENV from "../schemas/env";
+import connection from "../../config/bullMqConfig";
+import logger from "../utils/logger";
 
 const nftStorage = new NFTStorage({ token: ENV!.NFT_STORAGE_TOKEN });
 
-const generateTicketWorker = new Worker(
-  "myworker",
+const QUEUE_NAME = "ticketQueue";
+const ticketQueue = new Queue(QUEUE_NAME, { connection });
+const ticketWorker = new Worker(
+  QUEUE_NAME,
   async (job) => {
-    req.log.debug("generateTicket called");
+    logger.debug("generateTicket called");
 
     try {
-      const { invoiceId } = body;
+      const { invoiceId } = job.data;
 
       const initiatePaymentUrl = "https://tickets.chennaimetrorail.org/";
       const browser = await puppeteer.launch({
@@ -49,7 +54,7 @@ const generateTicketWorker = new Worker(
       await page.click(
         "body > ngb-modal-window > div > div > div.modal-footer > button"
       );
-      req.log.debug("done");
+      logger.debug("done");
 
       await page.waitForSelector("body > bd-modal");
 
@@ -84,7 +89,7 @@ const generateTicketWorker = new Worker(
       ).asElement()) as ElementHandle<Element>;
       payBtn.click();
 
-      req.log.debug("Waiting for payment");
+      logger.debug("Waiting for payment");
       // Wait 5mins for payment
       // await new Promise((r) => setTimeout(r, 60 * 1000));
       await page.waitForNavigation({ timeout: 60 * 1000 });
@@ -95,11 +100,11 @@ const generateTicketWorker = new Worker(
         `document.querySelector("div > div.col-md-5.col-sm-5.col-5 > div:nth-child(1) > img").getAttribute('src')`
       )) as string;
 
-      req.log.debug(await page.url());
+      logger.debug(await page.url());
 
       await browser.close();
 
-      req.log.debug(imgBase64.substring(0, 200));
+      logger.debug(imgBase64.substring(0, 200));
 
       // Convert b64 str to Blob for uploading img
       // Dont convert so 22: data:image/png;base64,
@@ -111,10 +116,10 @@ const generateTicketWorker = new Worker(
       const byteArray = new Uint8Array(byteNumbers);
 
       // Upload img
-      req.log.debug("Uploading img");
+      logger.debug("Uploading img");
       const blob = new Blob([byteArray], { type: "image/png" });
       const cid = await nftStorage.storeBlob(blob);
-      req.log.debug({ cid }, "CID");
+      logger.debug({ cid }, "CID");
 
       // Update CID in Notes
       const updateInvoice = await fetch(
@@ -128,15 +133,19 @@ const generateTicketWorker = new Worker(
         }
       );
       const json = await updateInvoice.json();
-      req.log.info({ invoiceId: json.id }, "Updated Invoice");
-
-      return res.send({ message: "Successfully got ticket", imgBase64 });
+      logger.info({ invoiceId: json.id }, "Updated Invoice");
     } catch (err) {
-      req.log.error(err);
-      return res.status(403).send({ message: "Not from QStash" });
+      logger.error(err);
     }
   },
   { connection }
 );
 
-export default generateTicketController;
+ticketWorker.on("completed", (job) => {
+  logger.info(`${job.id} has completed!`);
+});
+ticketWorker.on("failed", (job, err) => {
+  logger.error(`${job?.id ?? "Job"} has failed with ${err.message}`);
+});
+
+export default ticketQueue;
