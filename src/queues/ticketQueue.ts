@@ -27,7 +27,10 @@ const ticketWorker = new Worker(
 
       const page = await browser.newPage();
 
-      await page.goto(initiatePaymentUrl);
+      await page.goto(initiatePaymentUrl, {
+        waitUntil: "networkidle0",
+        timeout: 0,
+      });
 
       const sourceStationId = "0213";
       const destStationId = "0215";
