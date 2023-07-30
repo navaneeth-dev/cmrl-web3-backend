@@ -12,7 +12,7 @@ const ticketQueue = new Queue(QUEUE_NAME, { connection });
 const ticketWorker = new Worker(
   QUEUE_NAME,
   async (job) => {
-    logger.debug("generateTicket called");
+    logger.debug({ jobId: job.id }, "generateTicket called");
 
     try {
       const { invoiceId } = job.data;
@@ -146,6 +146,9 @@ ticketWorker.on("completed", (job) => {
 });
 ticketWorker.on("failed", (job, err) => {
   logger.error(`${job?.id ?? "Job"} has failed with ${err.message}`);
+});
+process.on("SIGINT", async () => {
+  await ticketWorker.close();
 });
 
 export default ticketQueue;
