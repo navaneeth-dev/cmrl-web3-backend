@@ -20,11 +20,14 @@ const ticketWorker = new Worker(
       const initiatePaymentUrl = "https://tickets.chennaimetrorail.org/";
       const browser = await chromium.launch({
         headless: ENV?.NODE_ENV !== "development",
+        args: ["--disable-web-security"],
       });
 
       const page = await browser.newPage({ locale: "en_US" });
 
       await page.goto(initiatePaymentUrl);
+
+      await page.waitForTimeout(2000);
 
       const sourceStationId = "0213";
       const destStationId = "0215";
@@ -45,12 +48,8 @@ const ticketWorker = new Worker(
       await page.locator("#login > form > div:nth-child(6) > button").click();
 
       // Ok modal
-      await page.click(
-        "body > ngb-modal-window > div > div > div.modal-footer > button"
-      );
+      await page.getByRole("button", { name: "Ok" }).click();
       logger.debug("Modal done");
-
-      await page.waitForSelector("body > bd-modal");
 
       // // Select UPI, type cast here as open issue in GitHub
       // await page.waitForFunction(
