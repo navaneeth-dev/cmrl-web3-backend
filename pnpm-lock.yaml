@@ -23,6 +23,9 @@ dependencies:
   pino-http:
     specifier: ^8.3.3
     version: 8.3.3
+  playwright:
+    specifier: ^1.36.2
+    version: 1.36.2
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -3377,6 +3380,21 @@ packages:
       safe-stable-stringify: 2.4.3
       sonic-boom: 3.3.0
       thread-stream: 2.3.0
+    dev: false
+
+  /playwright-core@1.36.2:
+    resolution: {integrity: sha512-sQYZt31dwkqxOrP7xy2ggDfEzUxM1lodjhsQ3NMMv5uGTRDsLxU0e4xf4wwMkF2gplIxf17QMBCodSFgm6bFVQ==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dev: false
+
+  /playwright@1.36.2:
+    resolution: {integrity: sha512-4Fmlq3KWsl85Bl4InJw1NC21aeQV0iSZuFvTDcy1F8zVmXmgQRe89GxF8zMSRt/KIS+2tUolak7EXVl9aC+JdA==}
+    engines: {node: '>=16'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      playwright-core: 1.36.2
     dev: false
 
   /prelude-ls@1.2.1:
