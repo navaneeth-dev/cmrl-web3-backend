@@ -18,7 +18,6 @@
     "nft.storage": "^7.1.1",
     "pino": "^8.14.1",
     "pino-http": "^8.3.3",
-    "puppeteer": "^20.8.2",
     "zod": "^3.21.4"
   },
   "devDependencies": {
