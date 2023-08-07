@@ -51,36 +51,17 @@ const ticketWorker = new Worker(
       await page.getByRole("button", { name: "Ok" }).click();
       logger.debug("Modal done");
 
-      // // Select UPI, type cast here as open issue in GitHub
-      // await page.waitForFunction(
-      //   'document.querySelector("body > bd-modal").shadowRoot.querySelector("#pay-option-item_wrapper > div > bd-pay-option > div > div")'
-      // );
+      // Select UPI, type cast here as open issue in GitHub
+      await page
+        .locator(
+          "#payment-option-list > bd-section:nth-child(3) bd-pay-option > div > div"
+        )
+        .click();
 
-      // const upiDiv = (await (
-      //   await page.evaluateHandle(
-      //     'document.querySelector("body > bd-modal").shadowRoot.querySelector("bd-section:nth-child(3) #pay-option-item_wrapper > div > bd-pay-option > div > div")'
-      //   )
-      // ).asElement()) as ElementHandle<Element>;
-      // await upiDiv?.click();
-
-      // // Wait for UPI VPA input
-      // await page.waitForFunction(
-      //   'document.querySelector("body > bd-modal").shadowRoot.querySelector("#upi_vpa")'
-      // );
-
-      // const upiVpa = (await (
-      //   await page.evaluateHandle(
-      //     `document.querySelector("body > bd-modal").shadowRoot.querySelector("#upi_vpa")`
-      //   )
-      // ).asElement()) as ElementHandle<Element>;
-      // await upiVpa.type(ENV?.UPI_VPA!);
-
-      // const payBtn = (await (
-      //   await page.evaluateHandle(
-      //     `document.querySelector("body > bd-modal").shadowRoot.querySelector("#undefined_wrapper > div > bd-button > div > center > button")`
-      //   )
-      // ).asElement()) as ElementHandle<Element>;
-      // payBtn.click();
+      // Enter UPI ID
+      await page
+        .getByLabel("Virtual Payment Address (VPA)")
+        .fill(ENV?.UPI_VPA ?? "404@404");
 
       // logger.debug("Waiting for payment");
       // // Wait 5mins for payment
