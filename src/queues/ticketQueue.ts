@@ -82,34 +82,34 @@ const ticketWorker = new Worker(
 
       logger.debug(imgBase64.substring(0, 200));
 
-      // // Convert b64 str to Blob for uploading img
-      // // Dont convert so 22: data:image/png;base64,
-      // const byteCharacters = atob(imgBase64.substring(22));
-      // const byteNumbers = new Array(byteCharacters.length);
-      // for (let i = 0; i < byteCharacters.length; i += 1) {
-      //   byteNumbers[i] = byteCharacters.charCodeAt(i);
-      // }
-      // const byteArray = new Uint8Array(byteNumbers);
+      // Convert b64 str to Blob for uploading img
+      // Dont convert so 22: data:image/png;base64,
+      const byteCharacters = atob(imgBase64.substring(22));
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i += 1) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
 
-      // // Upload img
-      // logger.debug("Uploading img");
-      // const blob = new Blob([byteArray], { type: "image/png" });
-      // const cid = await nftStorage.storeBlob(blob);
-      // logger.debug({ cid }, "CID");
+      // Upload img
+      logger.debug("Uploading img");
+      const blob = new Blob([byteArray], { type: "image/png" });
+      const cid = await nftStorage.storeBlob(blob);
+      logger.debug({ cid }, "CID");
 
-      // // Update CID in Notes
-      // const updateInvoice = await fetch(
-      //   `${ENV?.BITCART_URL}/api/invoices/${invoiceId}/customer`,
-      //   {
-      //     method: "PATCH",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({ notes: cid }),
-      //   }
-      // );
-      // const json = await updateInvoice.json();
-      // logger.info({ invoiceId: json.id }, "Updated Invoice");
+      // Update CID in Notes
+      const updateInvoice = await fetch(
+        `${ENV?.BITCART_URL}/api/invoices/${invoiceId}/customer`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ notes: cid }),
+        }
+      );
+      const json = await updateInvoice.json();
+      logger.info({ invoiceId: json.id }, "Updated Invoice");
     } catch (err) {
       logger.error(err);
     }
