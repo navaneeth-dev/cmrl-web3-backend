@@ -61,24 +61,26 @@ const ticketWorker = new Worker(
       // Enter UPI ID
       await page
         .getByLabel("Virtual Payment Address (VPA)")
-        .fill(ENV?.UPI_VPA ?? "404@404");
+        .type(ENV?.UPI_VPA ?? "404@404");
 
-      // logger.debug("Waiting for payment");
-      // // Wait 5mins for payment
-      // // await new Promise((r) => setTimeout(r, 60 * 1000));
-      // await page.waitForNavigation({ timeout: 120 * 1000 });
-      // await page.waitForNetworkIdle({ timeout: 120 * 1000 });
+      await page.getByRole("button", { name: "Make Payment for" }).click();
+      logger.debug("Waiting for payment");
 
-      // // Get ticket image
-      // const imgBase64 = (await page.evaluate(
-      //   `document.querySelector("div > div.col-md-5.col-sm-5.col-5 > div:nth-child(1) > img").getAttribute('src')`
-      // )) as string;
+      // Wait 5mins for payment
+      // Get ticket image
+      const imgBase64Element = page.locator("img.w-200");
+      const imgBase64 = await imgBase64Element.getAttribute("src", {
+        timeout: 60_000,
+      });
+      if (!imgBase64) {
+        logger.error("Cannot find imgBase64");
+        return;
+      }
 
-      // logger.debug(await page.url());
+      logger.debug(page.url());
+      await browser.close();
 
-      // await browser.close();
-
-      // logger.debug(imgBase64.substring(0, 200));
+      logger.debug(imgBase64.substring(0, 200));
 
       // // Convert b64 str to Blob for uploading img
       // // Dont convert so 22: data:image/png;base64,
