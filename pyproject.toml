@@ -10,6 +10,7 @@ packages = [{include = "cmrl_web3_backend"}]
 python = "^3.11"
 fastapi = "^0.101.0"
 uvicorn = {extras = ["standard"], version = "^0.23.2"}
+playwright = "^1.36.0"
 
 
 [build-system]
