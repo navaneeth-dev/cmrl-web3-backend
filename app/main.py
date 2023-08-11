@@ -1,13 +1,18 @@
 import time
 from fastapi import BackgroundTasks, FastAPI
+from playwright.async_api import async_playwright
 
 app = FastAPI()
 
 
-def process():
-    print("Called")
-    time.sleep(10)
-    print("Ended")
+async def process():
+    playwright = await async_playwright().start()
+    browser = await playwright.chromium.launch(headless=False)
+    page = await browser.new_page()
+    await page.goto("https://playwright.dev/")
+    await page.wait_for_timeout(5000)
+    await browser.close()
+    await playwright.stop()
 
 
 @app.post("/api/checkTicket")
