@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "cmrl-web3-backend"
+version = "0.1.0"
+description = "Backend for cmrl-web3"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "cmrl_web3_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.101.0"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
