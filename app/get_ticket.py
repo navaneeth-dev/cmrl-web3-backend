@@ -67,16 +67,16 @@ async def get_ticket(invoice_id: str):
         "Content-Type": "image/png",
         "Authorization": f"Bearer {os.getenv('NFT_STORAGE_TOKEN')}",
     }
-    r = requests.post("https://api.nft.storage/upload", data=data, headers=headers)
-    logging.debug(r.json())
-
-    # Update CID in notes
-    r = requests.patch(
-        f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}/customer",
-        json={"notes": r["cid"]},
+    nft_response = requests.post(
+        "https://api.nft.storage/upload", data=data, headers=headers
     )
 
-    invoice_json = r.json()
-    logging.info(f"Updated CID: {invoice_json['id']}")
+    # Update CID in notes
+    invoice_response = requests.patch(
+        f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}/customer",
+        json={"notes": nft_response.json()["cid"]},
+    )
+
+    logging.info(f"Updated CID: {invoice_response.json()['id']}")
 
     await playwright.stop()
