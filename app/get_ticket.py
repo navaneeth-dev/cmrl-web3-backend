@@ -8,7 +8,7 @@ import requests
 CMRL_TICKET_URL = "https://tickets.chennaimetrorail.org/"
 
 
-async def get_ticket():
+async def get_ticket(invoice_id):
     playwright = await async_playwright().start()
     browser = await playwright.chromium.launch(
         headless=False, args=["--disable-web-security"]
@@ -68,5 +68,13 @@ async def get_ticket():
     }
     r = requests.post("https://api.nft.storage/upload", data=data, headers=headers)
     logging.debug(r.json())
+
+    # Update CID in notes
+    r = requests.patch(
+        f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}/customer",
+        json={"notes": r["cid"]},
+    )
+
+    logging.info(f"Updated CID: {r.json()['id']}")
 
     await playwright.stop()
