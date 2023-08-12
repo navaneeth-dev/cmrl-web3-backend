@@ -4,6 +4,7 @@ from fastapi import BackgroundTasks, FastAPI
 from pydantic import BaseModel
 from app.get_ticket import get_ticket
 import logging
+from logging.handlers import SysLogHandler
 
 
 logging.basicConfig(
