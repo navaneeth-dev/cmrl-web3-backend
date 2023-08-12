@@ -4,7 +4,7 @@ from fastapi import BackgroundTasks, FastAPI
 from pydantic import BaseModel
 from app.get_ticket import get_ticket
 import logging
-from logging.handlers import SysLogHandler
+import requests
 
 
 logging.basicConfig(
@@ -23,5 +23,15 @@ class Ticket(BaseModel):
 @app.post("/api/checkTicket")
 async def checkTicket(ticket: Ticket, background_tasks: BackgroundTasks):
     logging.info(f"Checking Ticket {ticket.id}.")
+    r = requests.get(f"{os.getenv('BITCART_URL')}/api/invoices/{ticket.id}")
+    invoice = r.json()
+    if invoice["status"] != "complete":
+        return {"message": "Invoice not paid."}
+
+    # If blank means needs generation
+    if invoice["notes"] != "":
+        return {"message": "Ticket already generated."}
+
+    # Queue get_ticket
     background_tasks.add_task(get_ticket)
-    return {"message": "Scheduled to get ticket"}
+    return {"message": "Scheduled to get ticket."}
