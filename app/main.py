@@ -1,7 +1,10 @@
-import time
+import os
+from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI
 from playwright.async_api import async_playwright
 
+
+load_dotenv()
 app = FastAPI()
 
 
