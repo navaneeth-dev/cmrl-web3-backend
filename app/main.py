@@ -22,6 +22,6 @@ class Ticket(BaseModel):
 
 @app.post("/api/checkTicket")
 async def checkTicket(ticket: Ticket, background_tasks: BackgroundTasks):
-    logging.info(f"hi {ticket.id}")
+    logging.info(f"Checking Ticket {ticket.id}.")
     background_tasks.add_task(get_ticket)
     return {"message": "Scheduled to get ticket"}
