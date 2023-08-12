@@ -74,7 +74,7 @@ async def get_ticket(invoice_id: str):
     # Update CID in notes
     invoice_response = requests.patch(
         f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}/customer",
-        json={"notes": nft_response.json()["cid"]},
+        json={"notes": nft_response.json()["value"]["cid"]},
     )
 
     logging.info(f"Updated CID: {invoice_response.json()['id']}")
