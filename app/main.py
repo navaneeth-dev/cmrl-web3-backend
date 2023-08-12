@@ -33,5 +33,5 @@ async def checkTicket(ticket: Ticket, background_tasks: BackgroundTasks):
         return {"message": "Ticket already generated."}
 
     # Queue get_ticket
-    background_tasks.add_task(get_ticket)
+    background_tasks.add_task(get_ticket, ticket.id)
     return {"message": "Scheduled to get ticket."}

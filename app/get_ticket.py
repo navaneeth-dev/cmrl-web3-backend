@@ -8,7 +8,7 @@ import requests
 CMRL_TICKET_URL = "https://tickets.chennaimetrorail.org/"
 
 
-async def get_ticket(invoice_id):
+async def get_ticket(invoice_id: str):
     playwright = await async_playwright().start()
     browser = await playwright.chromium.launch(
         headless=False, args=["--disable-web-security"]
