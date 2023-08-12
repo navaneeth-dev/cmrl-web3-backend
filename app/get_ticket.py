@@ -1,10 +1,49 @@
+import logging
+import os
 from playwright.async_api import async_playwright
+
+
+CMRL_TICKET_URL = "https://tickets.chennaimetrorail.org/"
 
 
 async def get_ticket():
     playwright = await async_playwright().start()
-    browser = await playwright.chromium.launch(headless=False)
-    page = await browser.new_page()
-    await page.goto("https://playwright.dev/")
+    browser = await playwright.chromium.launch(
+        headless=False, args=["--disable-web-security"]
+    )
+    page = await browser.new_page(locale="en_US")
+    await page.goto(CMRL_TICKET_URL)
+
+    source_station_id = "0213"
+    dest_station_id = "0215"
+
+    # Select stations
+    await page.locator("#login > form > div:nth-child(1) > select").select_option(
+        source_station_id
+    )
+    await page.locator("#login > form > div:nth-child(2) > select").select_option(
+        dest_station_id
+    )
+
+    # Mobile No
+    await page.locator("#login > form > div:nth-child(3) > input").fill("1111111111")
+
+    # Submit
+    await page.locator("#login > form > div:nth-child(6) > button").click()
+
+    # Ok modal
+    await page.get_by_role("button", name="Ok").click()
+
+    # Select UPI
+    await page.locator(
+        "#payment-option-list > bd-section:nth-child(3) bd-pay-option > div > div"
+    ).click()
+
+    # Enter UPI ID
+    await page.get_by_label("Virtual Payment Address (VPA)").type(os.getenv("UPI_VPA"))
+
+    await page.get_by_role("button", name="Make Payment for").click()
+    logging.info("Waiting for payment.")
+
     await browser.close()
     await playwright.stop()
