@@ -17,4 +17,4 @@ class Ticket(BaseModel):
 async def checkTicket(ticket: Ticket, background_tasks: BackgroundTasks):
     print(ticket.id)
     background_tasks.add_task(get_ticket)
-    return {"message": "Hello World"}
+    return {"message": "Scheduled to get ticket"}
