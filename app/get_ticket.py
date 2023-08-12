@@ -75,6 +75,7 @@ async def get_ticket(invoice_id: str):
         json={"notes": r["cid"]},
     )
 
-    logging.info(f"Updated CID: {r.json()['id']}")
+    invoice_json = r.json()
+    logging.info(f"Updated CID: {invoice_json['id']}")
 
     await playwright.stop()
