@@ -11,7 +11,8 @@ CMRL_TICKET_URL = "https://tickets.chennaimetrorail.org/"
 async def get_ticket(invoice_id: str):
     playwright = await async_playwright().start()
     browser = await playwright.chromium.launch(
-        headless=False, args=["--disable-web-security"]
+        headless=True if os.getenv("FLY_APP_NAME") is not None else False,
+        args=["--disable-web-security"],
     )
     page = await browser.new_page(locale="en_US")
     await page.goto(CMRL_TICKET_URL)
