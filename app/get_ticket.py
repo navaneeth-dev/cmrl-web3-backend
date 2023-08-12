@@ -53,7 +53,7 @@ async def get_ticket():
         logging.error("Cannot find imgBase64")
         return
 
-    logging.debug(page.url())
+    logging.debug(page.url)
     await browser.close()
 
     logging.debug(img_b64[:200])
