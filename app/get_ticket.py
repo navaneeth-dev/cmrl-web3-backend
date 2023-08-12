@@ -6,6 +6,5 @@ async def get_ticket():
     browser = await playwright.chromium.launch(headless=False)
     page = await browser.new_page()
     await page.goto("https://playwright.dev/")
-    await page.wait_for_timeout(5000)
     await browser.close()
     await playwright.stop()
