@@ -1,6 +1,8 @@
 import logging
 import os
+import base64
 from playwright.async_api import async_playwright
+import requests
 
 
 CMRL_TICKET_URL = "https://tickets.chennaimetrorail.org/"
@@ -57,5 +59,14 @@ async def get_ticket():
     await browser.close()
 
     logging.debug(img_b64[:200])
+
+    # Upload img
+    data = base64.b64decode(img_b64[22:])
+    headers = {
+        "Content-Type": "image/png",
+        "Authorization": f"Bearer {os.getenv('NFT_STORAGE_TOKEN')}",
+    }
+    r = requests.post("https://api.nft.storage/upload", data=data, headers=headers)
+    logging.debug(r.json())
 
     await playwright.stop()
