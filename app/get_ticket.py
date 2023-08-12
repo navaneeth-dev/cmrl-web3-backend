@@ -54,6 +54,8 @@ async def get_ticket():
         return
 
     logging.debug(page.url())
-
     await browser.close()
+
+    logging.debug(img_b64[:200])
+
     await playwright.stop()
