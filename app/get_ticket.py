@@ -45,5 +45,15 @@ async def get_ticket():
     await page.get_by_role("button", name="Make Payment for").click()
     logging.info("Waiting for payment.")
 
+    # Wait 5mins for payment
+    # Get ticket image
+    img_b64_element = page.locator("img.w-200")
+    img_b64 = await img_b64_element.get_attribute("src", timeout=60_000)
+    if img_b64 is None:
+        logging.error("Cannot find imgBase64")
+        return
+
+    logging.debug(page.url())
+
     await browser.close()
     await playwright.stop()
