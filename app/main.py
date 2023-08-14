@@ -29,11 +29,11 @@ async def checkTicket(ticket: Ticket, background_tasks: BackgroundTasks):
         return {"message": "Invoice not paid."}
 
     # Check if already generated
-    if invoice["notes"].split("|")[0] == "success":
+    if invoice["metadata"]["status"] == "success":
         return {"message": "Ticket already generated."}
 
     # Check for generating status
-    if invoice["notes"] == "generating":
+    if invoice["metadata"]["status"] == "generating":
         return {"message": "Ticketing is generating"}
 
     # Queue get_ticket
