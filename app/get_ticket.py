@@ -9,6 +9,13 @@ CMRL_TICKET_URL = "https://tickets.chennaimetrorail.org/"
 
 
 async def get_ticket(invoice_id: str):
+    # Generating status
+    invoice_response = requests.patch(
+        f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}/customer",
+        json={"notes": "generating"},
+    )
+    logging.info("Updated to generating status")
+
     playwright = await async_playwright().start()
     browser = await playwright.chromium.launch(
         headless=True if os.getenv("FLY_APP_NAME") is not None else False,
@@ -76,7 +83,6 @@ async def get_ticket(invoice_id: str):
         f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}/customer",
         json={"notes": "success|" + nft_response.json()["value"]["cid"]},
     )
-
     logging.info(f"Updated CID: {invoice_response.json()['id']}")
 
     await playwright.stop()
