@@ -11,12 +11,11 @@ CMRL_TICKET_URL = "https://tickets.chennaimetrorail.org/"
 async def get_ticket(invoice_id: str, source_station_id: str, dest_station_id: str):
     # Generating status
     invoice_response = requests.patch(
-        f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}/customer",
-        json={"notes": "generating"},
+        f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}",
+        json={"metadata": {"status": "generating"}},
+        headers={"Authorization": f"Bearer {os.getenv('BITCART_API_TOKEN')}"},
     )
-    logging.info(
-        f"Updated to generating status. {invoice_response.status_code} {invoice_response.json()}"
-    )
+    logging.info(f"Updated to generating status.")
 
     playwright = await async_playwright().start()
     browser = await playwright.chromium.launch(
@@ -81,10 +80,14 @@ async def get_ticket(invoice_id: str, source_station_id: str, dest_station_id: s
 
     # Update CID in notes
     invoice_response = requests.patch(
-        f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}/customer",
+        f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}",
         json={
-            "notes": f"success|{nft_response.json()['value']['cid']}|{src_name}{dest_name}"
+            "metadata": {
+                "status": "generating",
+                "cid": f"success|{nft_response.json()['value']['cid']}|{src_name}{dest_name}",
+            }
         },
+        headers={"Authorization": f"Bearer {os.getenv('BITCART_API_TOKEN')}"},
     )
     logging.info(f"Updated CID: {invoice_response.json()['id']}")
 
