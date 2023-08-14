@@ -14,7 +14,9 @@ async def get_ticket(invoice_id: str, source_station_id: str, dest_station_id: s
         f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}/customer",
         json={"notes": "generating"},
     )
-    logging.info("Updated to generating status")
+    logging.info(
+        f"Updated to generating status. {invoice_response.status_code} {invoice_response.json()}"
+    )
 
     playwright = await async_playwright().start()
     browser = await playwright.chromium.launch(
