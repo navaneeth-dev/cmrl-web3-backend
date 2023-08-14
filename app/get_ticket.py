@@ -8,7 +8,7 @@ import requests
 CMRL_TICKET_URL = "https://tickets.chennaimetrorail.org/"
 
 
-async def get_ticket(invoice_id: str):
+async def get_ticket(invoice_id: str, source_station_id: str, dest_station_id: str):
     # Generating status
     invoice_response = requests.patch(
         f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}/customer",
@@ -23,9 +23,6 @@ async def get_ticket(invoice_id: str):
     )
     page = await browser.new_page(locale="en_US")
     await page.goto(CMRL_TICKET_URL)
-
-    source_station_id = "0213"
-    dest_station_id = "0215"
 
     # Select stations
     await page.locator("#login > form > div:nth-child(1) > select").select_option(
