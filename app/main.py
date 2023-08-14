@@ -28,16 +28,18 @@ async def checkTicket(ticket: Ticket, background_tasks: BackgroundTasks):
     if invoice["status"] != "complete":
         return {"message": "Invoice not paid."}
 
+    metadata = invoice["metadata"]
+
     # Check if already generated
-    if invoice["metadata"]["status"] == "success":
+    if metadata.get("status") == "success":
         return {"message": "Ticket already generated."}
 
     # Check for generating status
-    if invoice["metadata"]["status"] == "generating":
+    if metadata.get("status") == "generating":
         return {"message": "Ticketing is generating"}
 
     # Queue get_ticket
-    src_station_id = invoice["notes"].split("|")[0]
-    dest_station_id = invoice["notes"].split("|")[1]
+    src_station_id = metadata.get("src_id")
+    dest_station_id = metadata.get("dest_id")
     background_tasks.add_task(get_ticket, ticket.id, src_station_id, dest_station_id)
     return {"message": "Scheduled to get ticket."}
