@@ -83,8 +83,10 @@ async def get_ticket(invoice_id: str, source_station_id: str, dest_station_id: s
         f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}",
         json={
             "metadata": {
-                "status": "generating",
-                "cid": f"success|{nft_response.json()['value']['cid']}|{src_name}{dest_name}",
+                "status": "success",
+                "cid": f"{nft_response.json()['value']['cid']}",
+                "src_name": src_name,
+                "dest_name": dest_name,
             }
         },
         headers={"Authorization": f"Bearer {os.getenv('BITCART_API_TOKEN')}"},
