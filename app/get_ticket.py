@@ -78,7 +78,7 @@ async def get_ticket(invoice_id: str, source_station_id: str, dest_station_id: s
         "https://api.nft.storage/upload", data=data, headers=headers
     )
 
-    # Update CID in notes
+    # Update CID in metadata
     invoice_response = requests.patch(
         f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}",
         json={
