@@ -25,12 +25,14 @@ async def get_ticket(invoice_id: str, source_station_id: str, dest_station_id: s
     await page.goto(CMRL_TICKET_URL)
 
     # Select stations
-    await page.locator("#login > form > div:nth-child(1) > select").select_option(
-        source_station_id
-    )
-    await page.locator("#login > form > div:nth-child(2) > select").select_option(
-        dest_station_id
-    )
+    src_locator = page.locator("#login > form > div:nth-child(1) > select")
+    dest_locator = page.locator("#login > form > div:nth-child(2) > select")
+
+    await src_locator.select_option(source_station_id)
+    await dest_locator.select_option(dest_station_id)
+
+    src_name = (await src_locator.inner_text()).strip()
+    dest_name = (await src_locator.inner_text()).strip()
 
     # Mobile No
     await page.locator("#login > form > div:nth-child(3) > input").fill("1111111111")
@@ -78,7 +80,9 @@ async def get_ticket(invoice_id: str, source_station_id: str, dest_station_id: s
     # Update CID in notes
     invoice_response = requests.patch(
         f"{os.getenv('BITCART_URL')}/api/invoices/{invoice_id}/customer",
-        json={"notes": "success|" + nft_response.json()["value"]["cid"]},
+        json={
+            "notes": f"success|{nft_response.json()['value']['cid']}|{src_name}{dest_name}"
+        },
     )
     logging.info(f"Updated CID: {invoice_response.json()['id']}")
 
