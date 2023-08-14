@@ -32,8 +32,14 @@ async def get_ticket(invoice_id: str, source_station_id: str, dest_station_id: s
     await src_locator.select_option(source_station_id)
     await dest_locator.select_option(dest_station_id)
 
-    src_name = (await src_locator.inner_text()).strip()
-    dest_name = (await src_locator.inner_text()).strip()
+    src_name = await src_locator.evaluate(
+        "el => el.options[el.selectedIndex].innerText;"
+    )
+    dest_name = await dest_locator.evaluate(
+        "el => el.options[el.selectedIndex].innerText;"
+    )
+
+    logging.info(f"{src_name} to {dest_name}")
 
     # Mobile No
     await page.locator("#login > form > div:nth-child(3) > input").fill("1111111111")
